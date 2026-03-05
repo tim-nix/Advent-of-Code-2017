@@ -1,0 +1,89 @@
+# The problem input consists of a 2d array of
+# numbers from a spreadsheet. Find the only two
+# numbers in each row where one evenly divides the
+# other - that is, where the result of the
+# division operation is a whole number. They would
+# like you to find those numbers on each line,
+# divide them, and add up each line's result. This
+# result is the spreadsheet's checksum.
+#
+# What is the checksum for the spreadsheet in your
+# puzzle input?
+
+import time     # For timing the execution
+
+# Read in the data file and convert it to a list
+# of strings.
+def readFile(filename):
+   lines = []
+   try:
+      with open(filename, "r") as file:
+         line = file.readline()
+         while line:
+            lines.append(line.replace('\n', ''))
+            line = file.readline()
+
+         file.close()
+            
+   except FileNotFoundError:
+      print("Error: File not found!")
+   except:
+      print("Error: Can't read from file!")
+   
+   return lines
+
+
+# Convert the file input (a list of strings with
+# each string as a row of numbers) to a list of
+# lists of integers.
+def parseInput(values):
+   numbers = list()
+   for v in values:
+      # Split the row into separate numbers.
+      v = v.split()
+      
+      # Convert to a list of integers and add to
+      # the list.
+      numbers.append([ int(a) for a in v ])
+
+   # Return the numbers.
+   return numbers
+
+      
+if __name__ == '__main__':
+   # Start the timer
+   start_time = time.time()
+
+   # Read the input file and convert to a list of
+   # digits.   
+   fileInput = readFile("input2b.txt")
+   numbers = parseInput(fileInput)
+
+   # Iterate through each row of numbers.
+   checksum = 0
+   for row in numbers:
+      # Find the two numbers in which the first
+      # evenly divides the second.
+      row = sorted(row)
+      for i in range(1, len(row)):
+         for j in range(i):
+            # Are the two numbers found?
+            if (row[i] % row[j]) == 0:
+               # Add to the checksum the result of
+               # the division.
+               checksum += (row[i] // row[j])
+               break
+
+         else:
+            continue  # search not successful
+         
+         break # search successful; break outer
+      
+   # Display the resulting checksum. 
+   print("Checksum = " + str(checksum))
+
+   # Stop the timer and print the execution time.
+   print("\n\n--- %s seconds ---" % (time.time() - start_time))
+        
+    
+        
